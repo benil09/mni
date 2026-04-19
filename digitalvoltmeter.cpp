@@ -1,30 +1,22 @@
-#include <LiquidCrystal.h>
+#include <LiquidCrystal_I2C.h>
 
-// Initialize LCD (RS, E, D4, D5, D6, D7)
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
-int analogPin = A0;   // Voltage input pin
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+float rawData = 0;
 float voltage = 0.0;
-
 void setup() {
-  lcd.begin(16, 2);
-  lcd.print("Digital Voltmeter");
-  delay(2000);
-  lcd.clear();
+  lcd.init();
+  lcd.backlight();
 }
 
 void loop() {
-  int sensorValue = analogRead(analogPin);
-
-  // Convert to voltage (0-5V range)
-  voltage = sensorValue * (5.0 / 1023.0);
-
+  rawData = analogRead(A1);
+  voltage = rawData * 5.0 / 1023;
   lcd.setCursor(0, 0);
-  lcd.print("Voltage:");
+  lcd.print("Voltage: ");
 
   lcd.setCursor(0, 1);
   lcd.print(voltage);
   lcd.print(" V   ");
-
-  delay(500);
+  
 }
